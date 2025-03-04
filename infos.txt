@@ -1,0 +1,41 @@
+			#_________THREADS vs PROCESSES________#
+
+THREAD : - is a single sequence stream within a process. Eatch thread belongs to exactly one process. and a process
+			can have multi threads and these threads belonging to that process share code section, data section, 
+			OS resources (open files, signals...). but each thread has its own (thread control block) -thread id, program counter, register set and a stack.
+
+		 - threads run in concurrent manner that improves the application performance.	
+		 - threads can share common data so they do not need to use IPC like processes.
+		 - Priority can be assigned to the threads just like the process, and the highest priority thread is sheculed first.
+		 - each thread has its own (TCB).
+		and these are the basic components of threads in an OS:
+
+			-- stack space: stores local vars, functions calls, and return addresses specific to the thread.
+			-- Register set: hold temprary data and intermediate results for the thread's execution.
+			-- Program counter: tracks the current instruction being executed by the thread.
+
+		and there are two types of threads:
+
+			-- User level threads: they are not created  using syscalls and the kernel manages them in case user-level threads are single-handed processes.
+			-- Kernel level threads: they are directly handled via kernel threads management.
+
+		and that is the difference between process and thread:
+
+			-- threads within the same process run in a shared memory space.
+			-- threads are no independent of one another like processes and as a result threads share with other threads code section, data section os resources.
+				but like a process a thread has its own program counter, register set, stack space.
+
+		and what does the term of Multi-Threading mean?:
+			-- is a technique used in OSs to improve the performance and responsiveness of computer systems. It allows multiple threads to share the same resources
+				of a single process, such as cpu, memory...
+
+
+THREAD CONTROL BLOCK SYSTEM (TCBs): very similar to (PCBs) which represents processes, TCBs represents threads generated in the system. It contains infomation about the threads
+									such as it's id and states.
+				#_________THREADS SYSCALLS________#
+
+pthread_create(): starts a new thread in the calling process, the new thread starts execution by invoking the start_routinge function that the function takes as a parameter.
+					if any of the threads in the process calls exit or the main thread performsa return from the main(), this causes the termination of all threads in the process.
+
+pthread_join(): waits for the thread specified by thread as param to terminate
+
