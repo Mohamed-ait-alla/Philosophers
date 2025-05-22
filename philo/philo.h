@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:07:15 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/22 14:59:41 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:24:34 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,5 @@ typedef struct s_shared_data
 long long	get_time(void);
 int	ft_atoi(const char *s);
 void	init_data(t_shared_data *philos_data, char **av);
+void	*routine(void *arg);
 #endif
