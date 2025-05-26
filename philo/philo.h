@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:07:15 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/22 16:24:34 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/26 14:39:59 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,19 @@ typedef struct s_shared_data
 	int							time_to_die;
 	int							time_to_eat;
 	int							time_to_sleep;
-	int							num_of_times_each_philosopher_must_eat;
+	int							nb_of_times_each_philosopher_must_eat;
 	int							is_dead;
 	long long					start_time;
 	pthread_mutex_t				print_mutex;
+	pthread_mutex_t				time_mutex;
+	pthread_mutex_t				monitor_mutex;
 	pthread_mutex_t				*forks;
 	t_philo						*philos;
 }								t_shared_data;
 long long	get_time(void);
 int	ft_atoi(const char *s);
 void	init_data(t_shared_data *philos_data, char **av);
-void	*routine(void *arg);
+void	*philo_routine(void *arg);
+void	ft_usleep(t_philo *philo, long time);
+void	print_action(t_philo *philo, char *action);
 #endif
