@@ -6,11 +6,30 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:07:18 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/26 16:44:46 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/26 19:32:30 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	ft_cleanup(t_shared_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->nb_philos)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
+		i++;
+	}
+	pthread_mutex_destroy(&data->monitor_mutex);
+	pthread_mutex_destroy(&data->print_mutex);
+	pthread_mutex_destroy(&data->time_mutex);
+	if (data->forks)
+		free(data->forks);
+	if (data->philos)
+		free(data->philos);
+}
 
 int	check_n_of_times_eaten(t_shared_data *data)
 {
@@ -89,4 +108,5 @@ int	main(int ac, char **av)
 		i++;
 	}
 	pthread_join(monitor, NULL);
+	ft_cleanup(&philos_data);
 }
