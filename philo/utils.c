@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 09:44:29 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/26 16:17:56 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/27 22:22:23 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,39 @@ long long	get_time(void)
 	struct timeval current_time;
 	
 	gettimeofday(&current_time, NULL);
-	return (current_time.tv_sec * 1000LL + current_time.tv_usec / 1000);
+	return ((current_time.tv_sec * 1000LL) + (current_time.tv_usec / 1000));
 }
 
-void	ft_usleep(t_philo *philo, long time)
+int	check_for_death(t_philo *philo)
 {
-	long	devided_time;
-
-	devided_time = 0;
-	while (time >= devided_time && !philo->shared_data->is_dead)
+	pthread_mutex_lock(&philo->shared_data->death_mutex);
+	if (philo->shared_data->is_dead)
 	{
-		usleep(1000);
-		devided_time += 1000;
+		pthread_mutex_unlock(&philo->shared_data->death_mutex);	
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->shared_data->death_mutex);
+	return (0);
+}
+
+void	ft_usleep(t_philo *philo, long long time)
+{
+	// long	devided_time;
+	// devided_time = 0;
+	// while (time >= devided_time)
+	// {
+	// 	if (check_for_death(philo))
+	// 		return ;
+	// 	usleep(100);
+	// 	devided_time += 100;
+	// }
+	long int	start_time;
+
+	start_time = get_time();
+	while (!check_for_death(philo) && (get_time() - start_time) < time)
+	{
+		if (check_for_death(philo))
+			return ;
+		usleep(50);
 	}
 }

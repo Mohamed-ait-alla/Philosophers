@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:07:18 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/26 19:32:30 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/27 22:13:02 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,33 @@ void	ft_cleanup(t_shared_data *data)
 	pthread_mutex_destroy(&data->monitor_mutex);
 	pthread_mutex_destroy(&data->print_mutex);
 	pthread_mutex_destroy(&data->time_mutex);
+	pthread_mutex_destroy(&data->death_mutex);
+	pthread_mutex_destroy(&data->monitor_counter_mutex);
 	if (data->forks)
 		free(data->forks);
 	if (data->philos)
 		free(data->philos);
 }
 
-int	check_n_of_times_eaten(t_shared_data *data)
+static int	check_n_of_times_eaten(t_shared_data *data)
 {
 	int	counter;
 	int	i;
+	int meals_eaten;
 	
 	counter = 0;
 	i = 0;
-	while (i < data->nb_philos && !data->is_dead)
-	{		
-		if (data->philos[i].n_meals_eaten >= data->nb_of_times_each_philosopher_must_eat)
+	while (i < data->nb_philos)
+	{	
+		pthread_mutex_lock(&data->meals_eaten_mutex);
+		meals_eaten = data->philos[i].n_meals_eaten;
+		pthread_mutex_unlock(&data->meals_eaten_mutex);
+		if (meals_eaten == data->nb_of_times_each_philosopher_must_eat)
+		{
+			pthread_mutex_lock(&data->monitor_counter_mutex);	
 			counter++;
+			pthread_mutex_unlock(&data->monitor_counter_mutex);	
+		}
 		i++;
 	}
 	return (counter);
@@ -51,29 +61,42 @@ void	*monitor_check(void	*arg)
 {
 	t_shared_data	*data;
 	int				i;
+	long long		current_time;
+	long long		last_meal_time;
 
 	data = (t_shared_data *)arg;
-	while (!data->is_dead)
+	while (1)
 	{
+		if (check_for_death(&data->philos[0]))
+			break;
 		i = 0;
 		while (i < data->nb_philos)
 		{
-			pthread_mutex_lock(&data->monitor_mutex);
-			if (get_time() - data->philos[i].last_meal_time >= data->time_to_die)
+			pthread_mutex_lock(&data->time_mutex);
+			current_time = get_time();
+			last_meal_time = data->philos[i].last_meal_time;
+			pthread_mutex_unlock(&data->time_mutex);
+			if (current_time - last_meal_time >= data->time_to_die)
 			{
-				print_action(&data->philos[i], "is dead");
+				pthread_mutex_lock(&data->death_mutex);
+				data->is_dead = 1;
+				pthread_mutex_unlock(&data->death_mutex);
+				printf("%lld %d is dead\n", get_time()
+						- data->start_time, data->philos[i].philo_id);
+				return (NULL);
+			}
+			i++;	
+		}
+		if (data->nb_of_times_each_philosopher_must_eat > 0)
+		{
+			if (check_n_of_times_eaten(data) >= data->nb_philos)
+			{
+				pthread_mutex_lock(&data->monitor_mutex);
+				printf("rahom salow\n");
 				data->is_dead = 1;
 				pthread_mutex_unlock(&data->monitor_mutex);
 				return (NULL);
 			}
-			pthread_mutex_unlock(&data->monitor_mutex);
-			i++;	
-		}
-		// data race may be here
-		if (data->nb_of_times_each_philosopher_must_eat > 0 && (check_n_of_times_eaten(data) == data->nb_philos))
-		{
-			data->is_dead = 1;
-			return (NULL);
 		}
 	}
 	return (NULL);
