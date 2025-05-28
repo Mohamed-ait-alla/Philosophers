@@ -1,9 +1,11 @@
 NAME = philo
 
 SRCS = main.c \
-		parse_args.c \
+		init.c \
 		utils.c \
-		routine.c
+		routine.c \
+		monitor.c \
+		ft_atoi.c
 
 OBJS = $(SRCS:.c=.o)
 
