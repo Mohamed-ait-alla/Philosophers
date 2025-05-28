@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:50:50 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/28 12:30:07 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:16:32 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	*monitor(void	*arg)
 			{
 				pthread_mutex_lock(&data->death_mutex);
 				printf("all philos had eaten "
-					"[nb_of_times_each_philosopher_must_eat\n");
+					"[nb_of_times_each_philosopher_must_eat]\n");
 				data->is_dead = 1;
 				pthread_mutex_unlock(&data->death_mutex);
 				return (NULL);
