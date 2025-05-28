@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:07:15 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/27 22:11:54 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/27 22:40:10 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ typedef struct s_shared_data
 	pthread_mutex_t				time_mutex;
 	pthread_mutex_t				death_mutex;
 	pthread_mutex_t				monitor_mutex;
-	pthread_mutex_t				monitor_counter_mutex;
 	pthread_mutex_t				meals_eaten_mutex;
 	pthread_mutex_t				*forks;
 	t_philo						*philos;

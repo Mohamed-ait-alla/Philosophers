@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:07:18 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/27 22:13:02 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/28 10:03:04 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ void	ft_cleanup(t_shared_data *data)
 	pthread_mutex_destroy(&data->print_mutex);
 	pthread_mutex_destroy(&data->time_mutex);
 	pthread_mutex_destroy(&data->death_mutex);
-	pthread_mutex_destroy(&data->monitor_counter_mutex);
 	if (data->forks)
 		free(data->forks);
 	if (data->philos)
 		free(data->philos);
 }
+// 200 130 60 60
 
 static int	check_n_of_times_eaten(t_shared_data *data)
 {
@@ -46,12 +46,8 @@ static int	check_n_of_times_eaten(t_shared_data *data)
 		pthread_mutex_lock(&data->meals_eaten_mutex);
 		meals_eaten = data->philos[i].n_meals_eaten;
 		pthread_mutex_unlock(&data->meals_eaten_mutex);
-		if (meals_eaten == data->nb_of_times_each_philosopher_must_eat)
-		{
-			pthread_mutex_lock(&data->monitor_counter_mutex);	
+		if (meals_eaten == data->nb_of_times_each_philosopher_must_eat)	
 			counter++;
-			pthread_mutex_unlock(&data->monitor_counter_mutex);	
-		}
 		i++;
 	}
 	return (counter);
@@ -91,10 +87,10 @@ void	*monitor_check(void	*arg)
 		{
 			if (check_n_of_times_eaten(data) >= data->nb_philos)
 			{
-				pthread_mutex_lock(&data->monitor_mutex);
+				pthread_mutex_lock(&data->death_mutex);
 				printf("rahom salow\n");
 				data->is_dead = 1;
-				pthread_mutex_unlock(&data->monitor_mutex);
+				pthread_mutex_unlock(&data->death_mutex);
 				return (NULL);
 			}
 		}

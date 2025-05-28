@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 09:40:09 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/27 22:12:05 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/27 22:40:46 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	init_data(t_shared_data *philos_data, char **av)
 	pthread_mutex_init(&philos_data->monitor_mutex, NULL);
 	pthread_mutex_init(&philos_data->meals_eaten_mutex, NULL);
 	pthread_mutex_init(&philos_data->death_mutex, NULL);
-	pthread_mutex_init(&philos_data->monitor_counter_mutex, NULL);
 	philos_data->forks = malloc(sizeof(pthread_mutex_t) * philos_data->nb_philos);
 	if (!philos_data->forks)
 		return (-1);
