@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:07:18 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/28 12:25:06 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/29 11:35:01 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ft_cleanup(t_shared_data *data)
 		free(data->philos);
 }
 
-int	start_simulation(t_shared_data *p_data)
+void	start_simulation(t_shared_data *p_data)
 {
 	pthread_t	monitor_thread;
 	int			i;
@@ -40,23 +40,18 @@ int	start_simulation(t_shared_data *p_data)
 	i = 0;
 	while (i < p_data->nb_philos)
 	{
-		if (pthread_create(&p_data->philos[i].thread, NULL,
-				&philo_routine, &p_data->philos[i]) != 0)
-			return (write(2, "pthread_create failed!\n", 24), -1);
+		pthread_create(&p_data->philos[i].thread, NULL,
+			&philo_routine, &p_data->philos[i]);
 		i++;
 	}
-	if (pthread_create(&monitor_thread, NULL, &monitor, p_data))
-		return (write(2, "pthread_create failed!\n", 24), -1);
+	pthread_create(&monitor_thread, NULL, &monitor, p_data);
 	i = 0;
 	while (i < p_data->nb_philos)
 	{
-		if (pthread_join(p_data->philos[i].thread, NULL))
-			return (write(2, "pthread_join failed!\n", 22), -1);
+		pthread_join(p_data->philos[i].thread, NULL);
 		i++;
 	}
-	if (pthread_join(monitor_thread, NULL))
-		return (write(2, "pthread_join failed!\n", 22), -1);
-	return (0);
+	pthread_join(monitor_thread, NULL);
 }
 
 int	main(int ac, char **av)
@@ -76,7 +71,6 @@ int	main(int ac, char **av)
 		write(2, "Invalid Data: args must be positive integers\n", 46);
 		return (1);
 	}
-	if (start_simulation(&philos_data) < 0)
-		return (1);
+	start_simulation(&philos_data);
 	ft_cleanup(&philos_data);
 }
