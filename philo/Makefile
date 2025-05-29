@@ -10,7 +10,7 @@ SRCS = main.c \
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -pthread #-g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -pthread #-g -fsanitize=thread
 RM = rm -f
 
 %.o: %.c

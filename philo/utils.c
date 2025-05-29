@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 09:44:29 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/28 12:30:23 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:52:05 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	ft_usleep(t_philo *philo, long long time)
 	long int	start_time;
 
 	start_time = get_time();
-	while (!check_for_death(philo) && (get_time() - start_time) < time)
+	while ((get_time() - start_time) < time)
 	{
 		if (check_for_death(philo))
 			return ;

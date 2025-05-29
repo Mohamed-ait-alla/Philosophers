@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:50:50 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/29 11:54:07 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/29 18:38:04 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,20 @@ static int	check_n_of_times_eaten(t_shared_data *data)
 	return (counter);
 }
 
+static void	set_death_case_flag(t_shared_data *data, int idx)
+{
+	pthread_mutex_lock(&data->death_mutex);
+	data->is_dead = 1;
+	pthread_mutex_unlock(&data->death_mutex);
+	if (data->nb_philos != 1)
+	{
+		pthread_mutex_lock(&data->print_mutex);
+		printf("%lld %d is dead\n", get_time()
+			- data->start_time, data->philos[idx].philo_id);
+		pthread_mutex_unlock(&data->print_mutex);
+	}
+}
+
 static int	has_been_death(t_shared_data *data)
 {
 	long long		current_time;
@@ -47,12 +61,7 @@ static int	has_been_death(t_shared_data *data)
 		pthread_mutex_unlock(&data->time_mutex);
 		if (current_time - last_meal_time >= data->time_to_die)
 		{
-			pthread_mutex_lock(&data->death_mutex);
-			data->is_dead = 1;
-			pthread_mutex_unlock(&data->death_mutex);
-			if (data->nb_philos != 1)
-				printf("%lld %d is dead\n", get_time()
-					- data->start_time, data->philos[i].philo_id);
+			set_death_case_flag(data, i);
 			return (1);
 		}
 		i++;
@@ -83,7 +92,6 @@ void	*monitor(void	*arg)
 				return (NULL);
 			}
 		}
-		usleep(1000);
 	}
 	return (NULL);
 }

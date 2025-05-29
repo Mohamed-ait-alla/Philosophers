@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 09:40:09 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/28 12:27:33 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/29 20:09:26 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ static int	check_args(t_shared_data *data, char **av)
 		|| data->time_to_die <= 0
 		|| data->time_to_eat <= 0
 		|| data->time_to_sleep <= 0
-		|| data->nb_of_times_each_philosopher_must_eat < 0
-		|| (data->nb_of_times_each_philosopher_must_eat == 0 && av[5]))
+		|| (data->nb_of_times_each_philosopher_must_eat < 0 && av[5]))
 		return (0);
 	return (1);
 }
@@ -75,7 +74,7 @@ int	init_data(t_shared_data *philos_data, char **av)
 	if (av[5])
 		philos_data->nb_of_times_each_philosopher_must_eat = ft_atoi(av[5]);
 	else
-		philos_data->nb_of_times_each_philosopher_must_eat = 0;
+		philos_data->nb_of_times_each_philosopher_must_eat = -1;
 	philos_data->is_dead = 0;
 	philos_data->start_time = get_time();
 	if (!check_args(philos_data, av))

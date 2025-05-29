@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:58:10 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/29 11:56:02 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/29 20:12:11 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,15 @@ void	take_the_forks(t_philo *philo)
 	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->left_fork);
-		print_action(philo, "has taken a fork");
 		pthread_mutex_lock(philo->right_fork);
-		print_action(philo, "has taken a fork");
+		print_action(philo, "has taken forks");
 	}
 	else
 	{
 		usleep(1000);
 		pthread_mutex_lock(philo->right_fork);
-		print_action(philo, "has taken a fork");
 		pthread_mutex_lock(philo->left_fork);
-		print_action(philo, "has taken a fork");
+		print_action(philo, "has taken forks");
 	}
 }
 
@@ -89,13 +87,13 @@ void	*philo_routine(void *arg)
 	{
 		if (check_for_death(philo))
 			break ;
-		print_action(philo, "is Thinking");
-		if (check_for_death(philo))
-			break ;
 		philo_eat(philo);
 		if (check_for_death(philo))
 			break ;
 		philo_sleep(philo);
+		if (check_for_death(philo))
+			break ;
+		print_action(philo, "is Thinking");
 	}
 	return (NULL);
 }

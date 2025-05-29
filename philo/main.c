@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 10:07:18 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/29 11:35:01 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/29 19:20:44 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,11 @@ int	main(int ac, char **av)
 	{
 		write(2, "Invalid Data: args must be positive integers\n", 46);
 		return (1);
+	}
+	if (philos_data.nb_of_times_each_philosopher_must_eat == 0)
+	{
+		ft_cleanup(&philos_data);
+		return (0);
 	}
 	start_simulation(&philos_data);
 	ft_cleanup(&philos_data);
