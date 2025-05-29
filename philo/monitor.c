@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:50:50 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/28 16:16:32 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/29 11:54:07 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ static int	has_been_death(t_shared_data *data)
 			pthread_mutex_lock(&data->death_mutex);
 			data->is_dead = 1;
 			pthread_mutex_unlock(&data->death_mutex);
-			printf("%lld %d is dead\n", get_time()
-				- data->start_time, data->philos[i].philo_id);
+			if (data->nb_philos != 1)
+				printf("%lld %d is dead\n", get_time()
+					- data->start_time, data->philos[i].philo_id);
 			return (1);
 		}
 		i++;

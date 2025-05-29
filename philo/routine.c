@@ -6,7 +6,7 @@
 /*   By: mait-all <mait-all@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:58:10 by mait-all          #+#    #+#             */
-/*   Updated: 2025/05/29 11:31:46 by mait-all         ###   ########.fr       */
+/*   Updated: 2025/05/29 11:56:02 by mait-all         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	philo_eat(t_philo *philo)
 		philo->shared_data->is_dead = 1;
 		pthread_mutex_unlock(&philo->shared_data->death_mutex);
 		pthread_mutex_unlock(philo->left_fork);
+		printf("%lld %d is dead\n", get_time()
+			- philo->shared_data->start_time, 1);
 	}
 	else
 	{
